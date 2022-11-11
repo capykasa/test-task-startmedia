@@ -1,28 +1,8 @@
-.page-body {
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 58px;
-  padding-right: 58px;
-}
-
-.page-main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.header__wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.toggle-all {
-  background-color: #FFFFFF;
-  border: solid #595959;
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 2px;
-  margin: auto;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-}
+@import 'global/variables.scss';
+@import 'global/fonts.scss';
+@import 'global/global.scss';
+@import 'global/mixins.scss';
+@import 'template/header.scss';
+@import 'template/table.scss';
+@import 'template/table-item.scss';
+@import 'template/table-title.scss';

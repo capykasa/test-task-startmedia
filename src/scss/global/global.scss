@@ -1,0 +1,37 @@
+html,
+body {
+  font-family: $source-sans-pro;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: $grey-dark;
+  background-color: $bg-color;
+}
+
+.page-body {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 58px;
+  padding-right: 58px;
+}
+
+.page-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}

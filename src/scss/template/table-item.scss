@@ -1,0 +1,29 @@
+.race-table__item {
+  padding: 5px 20px;
+  margin: 30px;
+
+  &::before {
+    height: 1em;
+    display: table-row;
+    content: '';
+  }
+
+  &::after {
+    height: 1em;
+    display: table-row;
+    content: '';
+  }
+}
+
+.race-participant:nth-child(2n) {
+  background-color: $grey-extra-light;
+}
+
+.race-table__position {
+  text-align: center;
+  background-color: $bg-color-table;
+}
+
+.race-sort__type {
+  text-align: center;
+}

@@ -1,0 +1,49 @@
+.race-title__item {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.race-sort {
+  position: relative;
+}
+
+.race-sort__tuggle {
+  background-color: $bg-color-table;
+  border: none;
+  padding: 0px;
+}
+
+.race-sort__options {
+  @include list-reset;
+  background-color: white;
+  border-radius: 4px;
+
+  &--custom {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 52px;
+    z-index: 1;
+    display: none;
+  }
+
+  &--opened {
+    display: block;
+  }
+}
+
+.race-sort__option {
+  padding: 10px 20px;
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus,
+  &--active {
+    background-color: #f2f2f2;
+  }
+
+  &:selected {
+    background-color: #f2f2f2;
+  }
+}

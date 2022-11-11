@@ -1,0 +1,13 @@
+.header__wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.header__title {
+  color: $pink-light;
+  font-family: $segoe;
+  font-weight: 200;
+  font-size: 80px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
