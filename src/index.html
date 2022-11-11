@@ -8,9 +8,89 @@
   <title>Standings</title>
 </head>
 
-<body>
-  <h1>Table2</h1>
-  <h2>here</h2>
+<body class="page-body">
+  <header class="header">
+    <div class="header__wrapper">
+      <h1 class="header__title">Standings</h1>
+    </div>
+  </header>
+  <main class="page-main">
+    <div class="page-main__container">
+      <table class="race-table">
+        <tr class="race-title">
+          <th class="race-title__item">
+            <span class="race-title__span">Name</span>
+          </th>
+          <th class="race-title__item">
+            <span class="race-title__span">City</span>
+          </th>
+          <th class="race-title__item">
+            <span class="race-title__span">Car</span>
+          </th>
+          <th class="race-title__item">
+            <form class="race-sort" action="#" method="get">
+              <span class="race-sort__span">Result of</span>
+              <span class="race-sort__type">
+                race 1
+                <button class="toggle-all" aria-label="Toggle all to do tasks">
+                  <span class="rotate"></span>
+                </button>
+              </span>
+              <ul class="race-sort__options race-sort__options--custom race-sort__options--opened">
+                <li class="race-sort__option race-sort__option--active" tabindex="0">all races</li>
+                <li class="race-sort__option" tabindex="0">1 race</li>
+                <li class="race-sort__option" tabindex="0">2 race</li>
+                <li class="race-sort__option" tabindex="0">3 race</li>
+                <li class="race-sort__option" tabindex="0">4 race</li>
+              </ul>
+            </form>
+          </th>
+        </tr>
+        <tr class="race-participant">
+          <td class="race-participant__item">
+            <span class="race-participant__span">Alfonso G.</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">New York</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">Nissan GTR</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">12</span>
+          </td>
+        </tr>
+        <tr class="race-participant">
+          <td class="race-participant__item">
+            <span class="race-participant__span">Glen Mock</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">London</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">Audi RS6</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">2</span>
+          </td>
+        </tr>
+        <tr class="race-participant">
+          <td class="race-participant__item">
+            <span class="race-participant__span">Liam Notneeson</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">Ballymena</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">Porshe 911</span>
+          </td>
+          <td class="race-participant__item">
+            <span class="race-participant__span">19</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </main>
 </body>
 
 </html>

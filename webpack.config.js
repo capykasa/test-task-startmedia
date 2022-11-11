@@ -7,6 +7,7 @@ const devMode = mode === 'development';
 const devtool = devMode ? 'source-map' : undefined;
 
 module.exports = {
+  mode,
   entry: './src/main.js',
   output: {
     filename: '[name].[contenthash].js',
