@@ -8,7 +8,6 @@ const RenderPosition = {
 const createElement = (template, storage = 'div') => {
   const newElement = document.createElement(storage);
   newElement.innerHTML = template;
-  console.log(newElement.innerHTML)
 
   return newElement.firstElementChild;
 };
