@@ -1,4 +1,9 @@
-import './index.html';
 import './scss/index.scss';
+import BoardPresenter from './presenter/board-presenter.js';
 
-console.log(this);
+const siteMainElement = document.querySelector('.page-main');
+const siteRaceTableElement = siteMainElement.querySelector('.page-main__container');
+const boardPresenter = new BoardPresenter();
+
+boardPresenter.init(siteRaceTableElement);
+

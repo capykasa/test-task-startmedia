@@ -10,8 +10,9 @@ module.exports = {
   mode,
   entry: './src/main.js',
   output: {
-    filename: '[name].[contenthash].js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'build'),
+    assetModuleFilename: "assets/[hash][ext][query]",
     clean: true,
   },
   devtool,
@@ -20,7 +21,7 @@ module.exports = {
       template: path.resolve(__dirname, 'src', 'index.html')
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
+      filename: 'main.css',
     }),
   ],
   module: {
@@ -36,7 +37,11 @@ module.exports = {
           'css-loader',
           'sass-loader',
         ]
-      }
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
     ]
   }
 };
