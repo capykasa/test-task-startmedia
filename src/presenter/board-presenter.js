@@ -2,7 +2,7 @@ import { render } from '../render.js';
 import TableListView from '../view/table-list-view.js';
 import TableTitleView from '../view/table-title-view.js';
 import TableBodyView from '../view/table-body-view.js';
-import RaceParticipantView from '../view/table-race-participant-view.js';
+import RacerView from '../view/table-racer-view.js';
 
 export default class BoardPresenter {
   #pageMainContainer = null;
@@ -31,25 +31,21 @@ export default class BoardPresenter {
     this.#renderBoard();
   };
 
-  #renderPartipicant = (racer) => {
-    render(new RaceParticipantView(), this.#tableBodyComponent.element);
+  #renderRacer = (racer) => {
+    render(new RacerView(racer), this.#tableBodyComponent.element);
   };
 
-  #renderPartipicants = (racers) => {
-    racers.forEach((racer) => this.#renderPartipicant(racer));
+  #renderRacers = (racers) => {
+    racers.forEach((racer) => this.#renderRacer(racer));
   };
 
   #renderBoard = () => {
-    const rcers = this.racers;
+    const racers = this.racers;
 
     render(this.#tableListComponent, this.#pageMainContainer);
     render(this.#tableTitleComponent, this.#tableListComponent.element);
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    for (let i = 0; i < 3; i++) {
-      render(new RaceParticipantView(), this.#tableBodyComponent.element);
-    }
-
-    this.#renderPartipicants(rcers);
+    this.#renderRacers(racers);
   };
 }
