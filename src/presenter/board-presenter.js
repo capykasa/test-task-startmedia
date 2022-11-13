@@ -4,11 +4,14 @@ import TableTitleView from '../view/table-title-view.js';
 import TableBodyView from '../view/table-body-view.js';
 import RacerView from '../view/table-racer-view.js';
 
+const ALL_RESULTS = 'All Results';
 export default class BoardPresenter {
   #pageMainContainer = null;
   #racersModel = null;
   #attemptsModel = null;
-  #complatedRacers = null;
+
+  #raceNumbers = new Set([ALL_RESULTS]);
+  #currentRace = ALL_RESULTS;
 
   #tableListComponent = new TableListView();
   #tableTitleComponent = new TableTitleView();
@@ -32,46 +35,45 @@ export default class BoardPresenter {
     this.#renderBoard();
   };
 
-  #identificationOfResults = (racers, attempts) => {
+  #createdRaces = (racer, attempts) => {
     let raceNumber = 0;
+    const currentAttempts = {};
 
-    racers.map((racer) => {
-      racer.races = {};
-      racer.races.allResult = 0;
+    currentAttempts[ALL_RESULTS] = 0;
 
-      raceNumber = 0;
+    attempts.forEach((attempt) => {
+      if (racer.id === attempt.id) {
+        raceNumber++;
 
-      attempts.forEach((attempt) => {
-        if (racer.id === attempt.id) {
-          raceNumber++;
+        currentAttempts[ALL_RESULTS] += attempt.result;
+        currentAttempts[raceNumber] = attempt.result;
 
-          racer.races.allResult += attempt.result;
-          racer.races[raceNumber] = attempt.result;
-        }
-      })
-    });
+        this.#raceNumbers.add(raceNumber);
+      }
+    })
 
-    return racers;
+    return currentAttempts;
   }
 
-  #renderRacer = (racer) => {
-    render(new RacerView(racer), this.#tableBodyComponent.element);
+  #renderRacer = (racer, attempts) => {
+    const currentAttempts = this.#createdRaces(racer, attempts);
+    const currentAttempt = currentAttempts[this.#currentRace];
+
+    render(new RacerView(racer, currentAttempt), this.#tableBodyComponent.element);
   };
 
-  #renderRacers = (racers) => {
-    racers.forEach((racer) => this.#renderRacer(racer));
+  #renderRacers = (racers, attempts) => {
+    racers.forEach((racer) => this.#renderRacer(racer, attempts));
   };
 
   #renderBoard = () => {
     const racers = this.racers;
     const attempts = this.attempts;
 
-    this.#complatedRacers = this.#identificationOfResults(racers, attempts);
-
     render(this.#tableListComponent, this.#pageMainContainer);
     render(this.#tableTitleComponent, this.#tableListComponent.element);
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    this.#renderRacers(this.#complatedRacers);
+    this.#renderRacers(racers, attempts);
   };
 }

@@ -1,6 +1,6 @@
 import { createElement } from '../render';
 
-const createRacerTemplate = (racer) => {
+const createRacerTemplate = (racer, attempt) => {
   const { name, city, car } = racer;
 
   return (
@@ -18,7 +18,7 @@ const createRacerTemplate = (racer) => {
         <span class="race-participant__span">${car}</span>
       </td>
       <td class="race-participant__item race-table__item">
-        <span class="race-participant__span">12</span>
+        <span class="race-participant__span">${attempt}</span>
       </td>
     </tr>`
   );
@@ -27,13 +27,15 @@ const createRacerTemplate = (racer) => {
 export default class RacerView {
   #element = null;
   #racer = null;
+  #attempt = null;
 
-  constructor(racer) {
+  constructor(racer, attempt) {
     this.#racer = racer;
+    this.#attempt = attempt;
   }
 
   get template() {
-    return createRacerTemplate(this.#racer);
+    return createRacerTemplate(this.#racer, this.#attempt);
   }
 
   get element() {
