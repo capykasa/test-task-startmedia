@@ -8,6 +8,7 @@ export default class BoardPresenter {
   #pageMainContainer = null;
   #racersModel = null;
   #attemptsModel = null;
+  #complatedRacers = null;
 
   #tableListComponent = new TableListView();
   #tableTitleComponent = new TableTitleView();
@@ -31,6 +32,28 @@ export default class BoardPresenter {
     this.#renderBoard();
   };
 
+  #identificationOfResults = (racers, attempts) => {
+    let raceNumber = 0;
+
+    racers.map((racer) => {
+      racer.races = {};
+      racer.races.allResult = 0;
+
+      raceNumber = 0;
+
+      attempts.forEach((attempt) => {
+        if (racer.id === attempt.id) {
+          raceNumber++;
+
+          racer.races.allResult += attempt.result;
+          racer.races[raceNumber] = attempt.result;
+        }
+      })
+    });
+
+    return racers;
+  }
+
   #renderRacer = (racer) => {
     render(new RacerView(racer), this.#tableBodyComponent.element);
   };
@@ -41,11 +64,14 @@ export default class BoardPresenter {
 
   #renderBoard = () => {
     const racers = this.racers;
+    const attempts = this.attempts;
+
+    this.#complatedRacers = this.#identificationOfResults(racers, attempts);
 
     render(this.#tableListComponent, this.#pageMainContainer);
     render(this.#tableTitleComponent, this.#tableListComponent.element);
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    this.#renderRacers(racers);
+    this.#renderRacers(this.#complatedRacers);
   };
 }
