@@ -4,17 +4,16 @@ import TableTitleView from '../view/table-title-view.js';
 import TableBodyView from '../view/table-body-view.js';
 import RacerView from '../view/table-racer-view.js';
 
-const ALL_RESULTS = 'All Results';
+const ALL_RACES = 'All Races';
 export default class BoardPresenter {
   #pageMainContainer = null;
   #racersModel = null;
   #attemptsModel = null;
 
-  #raceNumbers = new Set([ALL_RESULTS]);
-  #currentRace = ALL_RESULTS;
+  #racesSort = new Set([ALL_RACES]);
+  #currentRace = ALL_RACES;
 
   #tableListComponent = new TableListView();
-  #tableTitleComponent = new TableTitleView();
   #tableBodyComponent = new TableBodyView();
 
   constructor(pageMainContainer, racersModel, attemptsModel) {
@@ -39,20 +38,24 @@ export default class BoardPresenter {
     let raceNumber = 0;
     const currentAttempts = {};
 
-    currentAttempts[ALL_RESULTS] = 0;
+    currentAttempts[ALL_RACES] = 0;
 
     attempts.forEach((attempt) => {
       if (racer.id === attempt.id) {
         raceNumber++;
 
-        currentAttempts[ALL_RESULTS] += attempt.result;
+        currentAttempts[ALL_RACES] += attempt.result;
         currentAttempts[raceNumber] = attempt.result;
 
-        this.#raceNumbers.add(raceNumber);
+        this.#racesSort.add(raceNumber)
       }
     })
 
     return currentAttempts;
+  }
+
+  #renderSort = (allSorts, sort) => {
+    render(new TableTitleView(allSorts, sort), this.#tableListComponent.element);
   }
 
   #renderRacer = (racer, attempts) => {
@@ -71,7 +74,9 @@ export default class BoardPresenter {
     const attempts = this.attempts;
 
     render(this.#tableListComponent, this.#pageMainContainer);
-    render(this.#tableTitleComponent, this.#tableListComponent.element);
+
+    this.#renderSort(this.#racesSort, this.#currentRace);
+
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
     this.#renderRacers(racers, attempts);
