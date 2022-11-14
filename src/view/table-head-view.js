@@ -11,7 +11,7 @@ export default class TableHeadView {
 
   get element() {
     if (!this.#element) {
-      this.#element = createElement(this.template);
+      this.#element = createElement(this.template, 'table');
     }
 
     return this.#element;

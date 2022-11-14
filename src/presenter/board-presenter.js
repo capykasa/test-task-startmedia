@@ -1,5 +1,6 @@
 import { remove, render } from '../render.js';
 import TableListView from '../view/table-list-view.js';
+import TableHeadView from '../view/table-head-view.js';
 import TableTitleView from '../view/table-title-view.js';
 import TableBodyView from '../view/table-body-view.js';
 import RacerView from '../view/table-racer-view.js';
@@ -14,6 +15,7 @@ export default class BoardPresenter {
   #currentSortType = ALL_RACES;
 
   #tableListComponent = new TableListView();
+  #tableHeadComponent = new TableHeadView();
   #tableBodyComponent = new TableBodyView();
   #tableTitleComponent = null;
 
@@ -72,7 +74,7 @@ export default class BoardPresenter {
   #renderSort = (allSorts, sort) => {
     this.#tableTitleComponent = new TableTitleView(allSorts, sort);
     this.#tableTitleComponent.setSortClickHandler(this.#sortClickHandler);
-    render(this.#tableTitleComponent, this.#tableListComponent.element);
+    render(this.#tableTitleComponent, this.#tableHeadComponent.element);
   }
 
   #renderRacer = (racer) => {
@@ -85,6 +87,7 @@ export default class BoardPresenter {
 
   #clearBoard = () => {
     remove(this.#tableListComponent);
+    remove(this.#tableHeadComponent);
     remove(this.#tableBodyComponent);
   };
 
@@ -92,6 +95,7 @@ export default class BoardPresenter {
     const racers = this.#connectingRacersAndResults(this.racers, this.attempts);
 
     render(this.#tableListComponent, this.#pageMainContainer);
+    render(this.#tableHeadComponent, this.#tableListComponent.element);
 
     this.#renderSort(this.#racesSort, this.#currentSortType);
 

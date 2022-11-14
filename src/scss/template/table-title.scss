@@ -10,25 +10,20 @@
 .race-sort__tuggle {
   background-color: $bg-color-table;
   border: none;
-  padding: 0px;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .race-sort__options {
   @include list-reset;
   background-color: white;
   border-radius: 4px;
-
-  &--custom {
-    position: absolute;
-    top: calc(100% + 1px);
-    left: 52px;
-    z-index: 1;
-    display: none;
-  }
-
-  &--opened {
-    display: block;
-  }
+  position: absolute;
+  top: calc(100% + 1px);
+  left: 52px;
+  z-index: 1;
+  display: none;
+  display: block;
 }
 
 .race-sort__option {
