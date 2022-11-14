@@ -1,4 +1,4 @@
-import { render } from '../render.js';
+import { remove, render } from '../render.js';
 import TableListView from '../view/table-list-view.js';
 import TableTitleView from '../view/table-title-view.js';
 import TableBodyView from '../view/table-body-view.js';
@@ -11,10 +11,11 @@ export default class BoardPresenter {
   #attemptsModel = null;
 
   #racesSort = new Set([ALL_RACES]);
-  #currentRace = ALL_RACES;
+  #currentSortType = ALL_RACES;
 
   #tableListComponent = new TableListView();
   #tableBodyComponent = new TableBodyView();
+  #tableTitleComponent = null;
 
   constructor(pageMainContainer, racersModel, attemptsModel) {
     this.#pageMainContainer = pageMainContainer;
@@ -34,51 +35,68 @@ export default class BoardPresenter {
     this.#renderBoard();
   };
 
-  #createdRaces = (racer, attempts) => {
+  #connectingRacersAndResults = (racers, attempts) => {
     let raceNumber = 0;
-    const currentAttempts = {};
 
-    currentAttempts[ALL_RACES] = 0;
+    racers.map((racer) => {
+      racer.races = {};
+      racer.races[ALL_RACES] = 0;
 
-    attempts.forEach((attempt) => {
-      if (racer.id === attempt.id) {
-        raceNumber++;
+      raceNumber = 0;
 
-        currentAttempts[ALL_RACES] += attempt.result;
-        currentAttempts[raceNumber] = attempt.result;
+      attempts.forEach((attempt) => {
+        if (racer.id === attempt.id) {
+          raceNumber++;
 
-        this.#racesSort.add(raceNumber)
-      }
-    })
+          racer.races[ALL_RACES] += attempt.result;
+          racer.races[raceNumber] = attempt.result;
 
-    return currentAttempts;
+          this.#racesSort.add(`race ${raceNumber}`)
+        }
+      })
+    });
+
+    return racers;
+  }
+
+  #sortClickHandler = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#currentSortType = sortType;
+    this.#clearBoard();
+    this.#renderBoard();
   }
 
   #renderSort = (allSorts, sort) => {
-    render(new TableTitleView(allSorts, sort), this.#tableListComponent.element);
+    this.#tableTitleComponent = new TableTitleView(allSorts, sort);
+    this.#tableTitleComponent.setSortClickHandler(this.#sortClickHandler);
+    render(this.#tableTitleComponent, this.#tableListComponent.element);
   }
 
-  #renderRacer = (racer, attempts) => {
-    const currentAttempts = this.#createdRaces(racer, attempts);
-    const currentAttempt = currentAttempts[this.#currentRace];
-
-    render(new RacerView(racer, currentAttempt), this.#tableBodyComponent.element);
+  #renderRacer = (racer) => {
+    render(new RacerView(racer), this.#tableBodyComponent.element);
   };
 
-  #renderRacers = (racers, attempts) => {
-    racers.forEach((racer) => this.#renderRacer(racer, attempts));
+  #renderRacers = (racers) => {
+    racers.forEach((racer) => this.#renderRacer(racer));
+  };
+
+  #clearBoard = () => {
+    remove(this.#tableListComponent);
+    remove(this.#tableBodyComponent);
   };
 
   #renderBoard = () => {
-    const racers = this.racers;
-    const attempts = this.attempts;
+    const racers = this.#connectingRacersAndResults(this.racers, this.attempts);
 
     render(this.#tableListComponent, this.#pageMainContainer);
 
-    this.#renderSort(this.#racesSort, this.#currentRace);
+    this.#renderSort(this.#racesSort, this.#currentSortType);
 
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    this.#renderRacers(racers, attempts);
+    this.#renderRacers(racers);
   };
 }

@@ -31,4 +31,13 @@ const render = (component, container, place = RenderPosition.BEFOREEND) => {
   }
 };
 
-export { RenderPosition, createElement, render };
+const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
+  component.element.remove();
+  component.removeElement();
+};
+
+export { RenderPosition, createElement, render, remove };
