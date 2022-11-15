@@ -20,19 +20,19 @@ const createTableSortTemplate = (allSorts, currentSort) => {
 
 const createTableTitleTemplate = (allSorts, currentSort) => (
   `<tr class="race-title">
-    <th class="race-title__item race-table__item">
+    <th class="race-title__item race-title__position race-table__item">
       <span class="race-title__span">№</span>
     </th>
-    <th class="race-title__item race-table__item">
+    <th class="race-title__item race-title__name race-table__item">
       <span class="race-title__span">Name</span>
     </th>
-    <th class="race-title__item race-table__item">
+    <th class="race-title__item race-title__city race-table__item">
       <span class="race-title__span">City</span>
     </th>
-    <th class="race-title__item race-table__item">
+    <th class="race-title__item race-title__car race-table__item">
       <span class="race-title__span">Car</span>
     </th>
-    <th class="race-title__item race-table__item">
+    <th class="race-title__item race-title__sort race-table__item">
       <form class="race-sort" action="#" method="get">
         <span class="race-sort__span">Result of</span>
         <span class="race-sort__type">

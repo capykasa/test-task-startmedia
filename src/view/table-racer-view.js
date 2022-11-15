@@ -1,25 +1,24 @@
 import { createElement } from '../render';
 
 const createRacerTemplate = (racer, currentSort) => {
-  console.log(racer);
   const { name, city, car, races, currentPosition } = racer;
   const currentResult = races[currentSort];
 
   return (
     `<tr class="race-participant">
-      <td class="race-participant__item race-table__item race-table__position">
+      <td class="race-participant__item race-participant__position race-table__item race-table__position">
         <span class="race-participant__span">${currentPosition}</span>
       </td>
-      <td class="race-participant__item race-table__item">
+      <td class="race-participant__item race-participant__name race-table__item">
         <span class="race-participant__span">${name}</span>
       </td>
-      <td class="race-participant__item race-table__item">
+      <td class="race-participant__item race-participant__city race-table__item">
         <span class="race-participant__span">${city}</span>
       </td>
-      <td class="race-participant__item race-table__item">
+      <td class="race-participant__item race-participant__car race-table__item">
         <span class="race-participant__span">${car}</span>
       </td>
-      <td class="race-participant__item race-table__item">
+      <td class="race-participant__item race-participant__result race-table__item">
         <span class="race-participant__span">${currentResult}</span>
       </td>
     </tr>`

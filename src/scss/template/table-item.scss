@@ -14,6 +14,22 @@
   }
 }
 
+.race-participant__name {
+  min-width: 120px;
+}
+
+.race-participant__city {
+  min-width: 120px;
+}
+
+.race-participant__car {
+  min-width: 170px;
+}
+
+.race-participant__result {
+  min-width: 170px;
+}
+
 .race-participant:nth-child(2n) {
   background-color: $grey-extra-light;
 }
