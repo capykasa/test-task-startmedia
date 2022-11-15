@@ -51,14 +51,24 @@ export default class BoardPresenter {
           raceNumber++;
 
           racer.races[ALL_RACES] += attempt.result;
-          racer.races[raceNumber] = attempt.result;
+          racer.races[`race ${raceNumber}`] = attempt.result;
 
           this.#racesSort.add(`race ${raceNumber}`)
         }
       })
     });
 
-    return racers;
+    const filterRacers = racers.filter((racer) =>
+      racer.races[this.#currentSortType] !== 0 && racer.races[this.#currentSortType] !== undefined
+    );
+
+    filterRacers.sort((racerA, racerB) =>
+      racerA.races[this.#currentSortType] < racerB.races[this.#currentSortType]
+        ? 1
+        : -1
+    );
+
+    return filterRacers;
   }
 
   #sortClickHandler = (sortType) => {
@@ -71,18 +81,18 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
-  #renderSort = (allSorts, sort) => {
-    this.#tableTitleComponent = new TableTitleView(allSorts, sort);
+  #renderSort = (allSorts, currentSort) => {
+    this.#tableTitleComponent = new TableTitleView(allSorts, currentSort);
     this.#tableTitleComponent.setSortClickHandler(this.#sortClickHandler);
     render(this.#tableTitleComponent, this.#tableHeadComponent.element);
   }
 
-  #renderRacer = (racer) => {
-    render(new RacerView(racer), this.#tableBodyComponent.element);
+  #renderRacer = (racer, currentSort) => {
+    render(new RacerView(racer, currentSort), this.#tableBodyComponent.element);
   };
 
-  #renderRacers = (racers) => {
-    racers.forEach((racer) => this.#renderRacer(racer));
+  #renderRacers = (racers, currentSort) => {
+    racers.forEach((racer) => this.#renderRacer(racer, currentSort));
   };
 
   #clearBoard = () => {
@@ -101,6 +111,6 @@ export default class BoardPresenter {
 
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    this.#renderRacers(racers);
+    this.#renderRacers(racers, this.#currentSortType);
   };
 }

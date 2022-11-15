@@ -1,7 +1,8 @@
 import { createElement } from '../render';
 
-const createRacerTemplate = (racer) => {
-  const { name, city, car } = racer;
+const createRacerTemplate = (racer, currentSort) => {
+  const { name, city, car, races } = racer;
+  const currentResult = races[currentSort];
 
   return (
     `<tr class="race-participant">
@@ -18,7 +19,7 @@ const createRacerTemplate = (racer) => {
         <span class="race-participant__span">${car}</span>
       </td>
       <td class="race-participant__item race-table__item">
-        <span class="race-participant__span">${null}</span>
+        <span class="race-participant__span">${currentResult}</span>
       </td>
     </tr>`
   );
@@ -27,13 +28,15 @@ const createRacerTemplate = (racer) => {
 export default class RacerView {
   #element = null;
   #racer = null;
+  #currentSort = null;
 
-  constructor(racer, attempt) {
+  constructor(racer, currentSort) {
     this.#racer = racer;
+    this.#currentSort = currentSort;
   }
 
   get template() {
-    return createRacerTemplate(this.#racer);
+    return createRacerTemplate(this.#racer, this.#currentSort);
   }
 
   get element() {
