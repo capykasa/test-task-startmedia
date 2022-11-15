@@ -6,6 +6,7 @@ import TableBodyView from '../view/table-body-view.js';
 import RacerView from '../view/table-racer-view.js';
 
 const ALL_RACES = 'All Races';
+const FIRST_POSITION = 1;
 export default class BoardPresenter {
   #pageMainContainer = null;
   #racersModel = null;
@@ -35,7 +36,7 @@ export default class BoardPresenter {
 
   init = () => {
     this.#renderBoard();
-  };
+  }
 
   #connectingRacersAndResults = (racers, attempts) => {
     let raceNumber = 0;
@@ -56,19 +57,29 @@ export default class BoardPresenter {
           this.#racesSort.add(`race ${raceNumber}`)
         }
       })
-    });
+    })
 
     const filterRacers = racers.filter((racer) =>
       racer.races[this.#currentSortType] !== 0 && racer.races[this.#currentSortType] !== undefined
-    );
+    )
 
     filterRacers.sort((racerA, racerB) =>
       racerA.races[this.#currentSortType] < racerB.races[this.#currentSortType]
         ? 1
         : -1
-    );
+    )
 
     return filterRacers;
+  }
+
+  #generateRacerPosition = (racers) => {
+    let position = FIRST_POSITION;
+    racers.map((racer) => {
+      racer.currentPosition = position;
+      position++;
+    })
+
+    return racers;
   }
 
   #sortClickHandler = (sortType) => {
@@ -89,20 +100,21 @@ export default class BoardPresenter {
 
   #renderRacer = (racer, currentSort) => {
     render(new RacerView(racer, currentSort), this.#tableBodyComponent.element);
-  };
+  }
 
   #renderRacers = (racers, currentSort) => {
     racers.forEach((racer) => this.#renderRacer(racer, currentSort));
-  };
+  }
 
   #clearBoard = () => {
     remove(this.#tableListComponent);
     remove(this.#tableHeadComponent);
     remove(this.#tableBodyComponent);
-  };
+  }
 
   #renderBoard = () => {
     const racers = this.#connectingRacersAndResults(this.racers, this.attempts);
+    this.#generateRacerPosition(racers);
 
     render(this.#tableListComponent, this.#pageMainContainer);
     render(this.#tableHeadComponent, this.#tableListComponent.element);
@@ -112,5 +124,5 @@ export default class BoardPresenter {
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
     this.#renderRacers(racers, this.#currentSortType);
-  };
+  }
 }

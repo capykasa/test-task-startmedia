@@ -15,7 +15,7 @@ const createTableSortTemplate = (allSorts, currentSort) => {
         </li>`
     ).join('')}
     </ul>`
-  )
+  );
 }
 
 const createTableTitleTemplate = (allSorts, currentSort) => (
@@ -82,18 +82,18 @@ export default class TableTitleView {
   #sortPanelHandler = () => {
     this.element.querySelector('.race-sort__options')
       .classList.toggle('visually-hidden');
-  };
+  }
 
   setSortClickHandler = (callback) => {
     this._callback.sortClick = callback;
     this.element.querySelector('.race-sort__options')
       .addEventListener('click', this.#sortClickHandler);
-  };
+  }
 
   #sortClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.sortClick(evt.target.dataset.sortType);
-  };
+  }
 
   removeElement() {
     this.#element = null;
