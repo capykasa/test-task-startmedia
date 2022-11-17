@@ -15,5 +15,9 @@ const boardPresenter = new BoardPresenter(
   attemptsModel
 );
 
+fetch('http://localhost:8000/cars')
+  .then((response) => response.json())
+  .then((resp) => console.log(resp))
+
 boardPresenter.init();
 
