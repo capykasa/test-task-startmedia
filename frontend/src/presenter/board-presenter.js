@@ -1,29 +1,33 @@
 import { remove, render } from '../render.js';
+import LoadingView from '../view/loading-view.js';
 import TableListView from '../view/table-list-view.js';
 import TableHeadView from '../view/table-head-view.js';
 import TableTitleView from '../view/table-title-view.js';
 import TableBodyView from '../view/table-body-view.js';
 import RacerView from '../view/table-racer-view.js';
+import { UpdateType } from '../const.js';
 
 const ALL_RACES = 'All Races';
 const FIRST_POSITION = 1;
 export default class BoardPresenter {
   #pageMainContainer = null;
   #racersModel = null;
-  #attemptsModel = null;
 
-  #racesSort = new Set([ALL_RACES]);
-  #currentSortType = ALL_RACES;
-
+  #loadingComponent = new LoadingView();
   #tableListComponent = new TableListView();
   #tableHeadComponent = new TableHeadView();
   #tableBodyComponent = new TableBodyView();
   #tableTitleComponent = null;
 
-  constructor(pageMainContainer, racersModel, attemptsModel) {
+  #racesSort = new Set([ALL_RACES]);
+  #currentSortType = ALL_RACES;
+  #isLoading = true;
+
+  constructor(pageMainContainer, racersModel) {
     this.#pageMainContainer = pageMainContainer;
     this.#racersModel = racersModel;
-    this.#attemptsModel = attemptsModel;
+
+    this.#racersModel.addObserver(this.#handleModelEvent);
   }
 
   get racers() {
@@ -31,12 +35,32 @@ export default class BoardPresenter {
   }
 
   get attempts() {
-    return this.#attemptsModel.attempts;
+    return this.#racersModel.attempts;
   }
 
   init = () => {
     this.#renderBoard();
   }
+
+  #handleModelEvent = (updateType) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        break;
+      case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
+    }
+  };
 
   #connectingRacersAndResults = (racers, attempts) => {
     let raceNumber = 0;
@@ -92,6 +116,10 @@ export default class BoardPresenter {
     this.#renderBoard();
   }
 
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#pageMainContainer);
+  };
+
   #renderSort = (allSorts, currentSort) => {
     this.#tableTitleComponent = new TableTitleView(allSorts, currentSort);
     this.#tableTitleComponent.setSortClickHandler(this.#sortClickHandler);
@@ -113,6 +141,12 @@ export default class BoardPresenter {
   }
 
   #renderBoard = () => {
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+
     const racers = this.#connectingRacersAndResults(this.racers, this.attempts);
     this.#generateRacerPosition(racers);
 

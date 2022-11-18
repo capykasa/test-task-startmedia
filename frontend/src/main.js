@@ -1,23 +1,20 @@
 import './scss/index.scss';
 import BoardPresenter from './presenter/board-presenter';
 import RacersModel from './model/racers-model';
-import AttemptsModel from './model/attempts-model';
+import Api from './api';
+
+const END_POINT = 'http://localhost:8000';
 
 const siteMainElement = document.querySelector('.page-main');
 const sitePageMainElement = siteMainElement.querySelector('.page-main__container');
 
-const racersModel = new RacersModel();
-const attemptsModel = new AttemptsModel();
+const racersModel = new RacersModel(new Api(END_POINT));
 
 const boardPresenter = new BoardPresenter(
   sitePageMainElement,
-  racersModel,
-  attemptsModel
+  racersModel
 );
 
-fetch('http://localhost:8000/cars')
-  .then((response) => response.json())
-  .then((resp) => console.log(resp))
-
 boardPresenter.init();
+racersModel.init();
 
