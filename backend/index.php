@@ -6,15 +6,17 @@ header("Content-Type: application/json");
 include_once('init.php');
 
 $currentUrl = $_SERVER['REQUEST_URI'];
+
 $cars = getAllCars();
 $attempts = getAllAttempts();
 
+$resultsWithRacers = connectingResultsAndRacers($cars, $attempts);
+
+$races = json_encode($resultsWithRacers, JSON_UNESCAPED_UNICODE);
+
 switch ($currentUrl) {
-  case CARS_URL:
-    echo $cars;
-    break;
-  case ATTEMPTS_URL:
-    echo $attempts;
+  case RACES_URL:
+    echo $races;
     break;
   default:
     echo 'result display error';
