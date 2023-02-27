@@ -7,11 +7,10 @@ import TableBodyView from '../view/table-body-view.js';
 import RacerView from '../view/table-racer-view.js';
 import { UpdateType } from '../const.js';
 
-const ALL_RACES = 'All Races';
-const FIRST_POSITION = 1;
+const FIRST_POSITION = '1';
 export default class BoardPresenter {
   #pageMainContainer = null;
-  #racersModel = null;
+  #racesModel = null;
 
   #loadingComponent = new LoadingView();
   #tableListComponent = new TableListView();
@@ -19,23 +18,19 @@ export default class BoardPresenter {
   #tableBodyComponent = new TableBodyView();
   #tableTitleComponent = null;
 
-  #racesSort = new Set([ALL_RACES]);
-  #currentSortType = ALL_RACES;
+  #racesSort = [];
+  #currentSortType = null;
   #isLoading = true;
 
   constructor(pageMainContainer, racersModel) {
     this.#pageMainContainer = pageMainContainer;
-    this.#racersModel = racersModel;
+    this.#racesModel = racersModel;
 
-    this.#racersModel.addObserver(this.#handleModelEvent);
+    this.#racesModel.addObserver(this.#handleModelEvent);
   }
 
-  get racers() {
-    return this.#racersModel.racers;
-  }
-
-  get attempts() {
-    return this.#racersModel.attempts;
+  get races() {
+    return this.#racesModel.races;
   }
 
   init = () => {
@@ -62,33 +57,19 @@ export default class BoardPresenter {
     }
   };
 
-  #connectingRacersAndResults = (racers, attempts) => {
-    let raceNumber = 0;
+  #generateSort = (races) => {
+    return Object.keys(races);
+  }
 
-    racers.map((racer) => {
-      racer.races = {};
-      racer.races[ALL_RACES] = 0;
+  #getCurrentRacers = (races) => {
+    const sortRacers = races[this.#currentSortType];
 
-      raceNumber = 0;
-
-      attempts.forEach((attempt) => {
-        if (racer.id === attempt.id) {
-          raceNumber++;
-
-          racer.races[ALL_RACES] += attempt.result;
-          racer.races[`race ${raceNumber}`] = attempt.result;
-
-          this.#racesSort.add(`race ${raceNumber}`)
-        }
-      })
-    })
-
-    const filterRacers = racers.filter((racer) =>
-      racer.races[this.#currentSortType] !== 0 && racer.races[this.#currentSortType] !== undefined
+    const filterRacers = sortRacers.filter((racer) =>
+      racer.result !== 0 && racer.result !== undefined
     )
 
     filterRacers.sort((racerA, racerB) =>
-      racerA.races[this.#currentSortType] < racerB.races[this.#currentSortType]
+      racerA.result < racerB.result
         ? 1
         : -1
     )
@@ -126,12 +107,12 @@ export default class BoardPresenter {
     render(this.#tableTitleComponent, this.#tableHeadComponent.element);
   }
 
-  #renderRacer = (racer, currentSort) => {
-    render(new RacerView(racer, currentSort), this.#tableBodyComponent.element);
+  #renderRacer = (racer) => {
+    render(new RacerView(racer), this.#tableBodyComponent.element);
   }
 
-  #renderRacers = (racers, currentSort) => {
-    racers.forEach((racer) => this.#renderRacer(racer, currentSort));
+  #renderRacers = (racers) => {
+    racers.forEach((racer) => this.#renderRacer(racer));
   }
 
   #clearBoard = () => {
@@ -147,7 +128,12 @@ export default class BoardPresenter {
       return;
     }
 
-    const racers = this.#connectingRacersAndResults(this.racers, this.attempts);
+    if (this.#currentSortType === null) {
+      this.#racesSort = this.#generateSort(this.races);
+      this.#currentSortType = this.#racesSort[0];
+    }
+
+    const racers = this.#getCurrentRacers(this.races);
     this.#generateRacerPosition(racers);
 
     render(this.#tableListComponent, this.#pageMainContainer);
@@ -157,6 +143,6 @@ export default class BoardPresenter {
 
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    this.#renderRacers(racers, this.#currentSortType);
+    this.#renderRacers(racers);
   }
 }

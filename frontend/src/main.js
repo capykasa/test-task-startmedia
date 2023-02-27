@@ -1,6 +1,6 @@
 import './scss/index.scss';
 import BoardPresenter from './presenter/board-presenter';
-import RacersModel from './model/racers-model';
+import RacesModel from './model/races-model';
 import Api from './api';
 
 const END_POINT = 'http://localhost:8000';
@@ -8,13 +8,13 @@ const END_POINT = 'http://localhost:8000';
 const siteMainElement = document.querySelector('.page-main');
 const sitePageMainElement = siteMainElement.querySelector('.page-main__container');
 
-const racersModel = new RacersModel(new Api(END_POINT));
+const racesModel = new RacesModel(new Api(END_POINT));
 
 const boardPresenter = new BoardPresenter(
   sitePageMainElement,
-  racersModel
+  racesModel
 );
 
 boardPresenter.init();
-racersModel.init();
+racesModel.init();
 
