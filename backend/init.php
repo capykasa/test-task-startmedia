@@ -1,7 +1,9 @@
 <?php
 
-const RACES_URL = '/races';
+spl_autoload_register(function ($name) {
+  $path = str_replace('\\', '/', $name) . '.php';
 
-const ALL_RACES = 'All Races';
-
-include_once('model/races.php');
+  if (file_exists($path)) {
+    include_once($path);
+  }
+});

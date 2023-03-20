@@ -5,19 +5,36 @@ header("Content-Type: application/json");
 
 include_once('init.php');
 
-$currentUrl = $_SERVER['REQUEST_URI'];
+use System\Router;
+use System\ModulesDispatcher;
 
-$cars = getAllCars();
-$attempts = getAllAttempts();
+use Modules\Races\Module as Races;
 
-$resultsWithRacers = connectingResultsAndRacers($cars, $attempts);
+const BASE_URL = '/';
 
-$races = json_encode($resultsWithRacers, JSON_UNESCAPED_UNICODE);
+const CARS_URL = '/cars';
+const ATTEMPTS_URL = '/attempts';
+const RACES_URL = '/races';
 
-switch ($currentUrl) {
-  case RACES_URL:
-    echo $races;
-    break;
-  default:
-    echo 'result display error';
+const ALL_RACES = 'All Races';
+
+try {
+  $modules = new ModulesDispatcher();
+  $modules->add(new Races());
+  $router = new Router(BASE_URL);
+
+  $modules->registerRoutes($router);
+
+  $uri = $_SERVER['REQUEST_URI'];
+  $activeRoute = $router->resolvePath($uri);
+
+  $controller = $activeRoute['controller'];
+  $method = $activeRoute['method'];
+
+  $result = $controller->$method();
+  $resultEncode = json_encode($result, JSON_UNESCAPED_UNICODE);
+
+  echo $resultEncode;
+} catch (Exception) {
+  echo 'result display error';
 }
