@@ -11,7 +11,7 @@ const createTableSortTemplate = (allSorts, currentSort) => {
         data-sort-type="${sort}"
         tabindex="0"
         >
-        ${sort}
+        Race ${sort}
         </li>`
     ).join('')}
     </ul>`

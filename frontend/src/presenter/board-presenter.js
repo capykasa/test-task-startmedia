@@ -29,7 +29,11 @@ export default class BoardPresenter {
     this.#racesModel.addObserver(this.#handleModelEvent);
   }
 
-  get races() {
+  get racers() {
+    return Object.values(this.#racesModel.racers);
+  }
+
+  get sort() {
     return this.#racesModel.races;
   }
 
@@ -57,19 +61,13 @@ export default class BoardPresenter {
     }
   };
 
-  #generateSort = (races) => {
-    return Object.keys(races);
-  }
-
-  #getCurrentRacers = (races) => {
-    const sortRacers = races[this.#currentSortType];
-
-    const filterRacers = sortRacers.filter((racer) =>
-      racer.result !== 0 && racer.result !== undefined
-    )
+  #getCurrentSortingRacers = (racers) => {
+    const filterRacers = racers.filter((racer) =>
+      racer.results[this.#currentSortType] !== 0 && racer.results[this.#currentSortType] !== undefined
+    );
 
     filterRacers.sort((racerA, racerB) =>
-      racerA.result < racerB.result
+      racerA.results[this.#currentSortType] < racerB.results[this.#currentSortType]
         ? 1
         : -1
     )
@@ -107,12 +105,12 @@ export default class BoardPresenter {
     render(this.#tableTitleComponent, this.#tableHeadComponent.element);
   }
 
-  #renderRacer = (racer) => {
-    render(new RacerView(racer), this.#tableBodyComponent.element);
+  #renderRacer = (racer, currentSort) => {
+    render(new RacerView(racer, currentSort), this.#tableBodyComponent.element);
   }
 
-  #renderRacers = (racers) => {
-    racers.forEach((racer) => this.#renderRacer(racer));
+  #renderRacers = (racers, currentSort) => {
+    racers.forEach((racer) => this.#renderRacer(racer, currentSort));
   }
 
   #clearBoard = () => {
@@ -129,11 +127,11 @@ export default class BoardPresenter {
     }
 
     if (this.#currentSortType === null) {
-      this.#racesSort = this.#generateSort(this.races);
+      this.#racesSort = this.sort;
       this.#currentSortType = this.#racesSort[0];
     }
 
-    const racers = this.#getCurrentRacers(this.races);
+    const racers = this.#getCurrentSortingRacers(this.racers);
     this.#generateRacerPosition(racers);
 
     render(this.#tableListComponent, this.#pageMainContainer);
@@ -143,6 +141,6 @@ export default class BoardPresenter {
 
     render(this.#tableBodyComponent, this.#tableListComponent.element);
 
-    this.#renderRacers(racers);
+    this.#renderRacers(racers, this.#currentSortType);
   }
 }

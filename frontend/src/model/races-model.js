@@ -3,11 +3,16 @@ import Observable from '../utils/observable';
 
 export default class RacersModel extends Observable {
   #api = null;
+  #racers = [];
   #races = [];
 
   constructor(api) {
     super();
     this.#api = api;
+  }
+
+  get racers() {
+    return this.#racers;
   }
 
   get races() {
@@ -16,8 +21,10 @@ export default class RacersModel extends Observable {
 
   init = async () => {
     try {
+      this.#racers = await this.#api.racers;
       this.#races = await this.#api.races;
     } catch (err) {
+      this.#racers = [];
       this.#races = [];
     }
 

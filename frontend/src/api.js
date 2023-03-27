@@ -8,6 +8,11 @@ export default class Api {
     this._authorization = authorization;
   }
 
+  get racers() {
+    return this._load({ url: 'racers' })
+      .then(Api.parseResponse);
+  }
+
   get races() {
     return this._load({ url: 'races' })
       .then(Api.parseResponse);

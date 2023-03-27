@@ -23,33 +23,22 @@ class Index {
     return json_decode($attempts, true);
   }
 
-  public function races(): array {
-    $racers = $this->cars();
+  public function races() {
     $attempts = $this->attempts();
+    $attemptsId = [];
+    $races = [ALL_RACES];
 
-    $raceNumber = 0;
-    $resultsWithRacers[ALL_RACES] = [];
-
-    foreach ($racers as $racer) {
-      $raceNumber = 0;
-      $allResult = 0;
-
-      foreach ($attempts as $attempt) {
-        if ($attempt['id'] === $racer['id']) {
-          $raceNumber++;
-          $allResult += $attempt['result'];
-
-          $resultsWithRacers["race $raceNumber"][] = $racer + ['result' => $attempt['result']];
-        }
-      }
-
-      $resultsWithRacers[ALL_RACES][] = $racer + ['result' => $allResult];
+    foreach ($attempts as $attempt) {
+      $attemptsId[] = $attempt['id'];
     }
 
-    return $resultsWithRacers;
+    $maxNumberRaces =  max(array_count_values($attemptsId));
+    $racesCount = range(1, $maxNumberRaces, 1);
+
+    return array_merge($races, $racesCount);
   }
 
-  public function racers() {
+  public function racers(): array {
     $racers = $this->cars();
     $attempts = $this->attempts();
 
@@ -79,10 +68,6 @@ class Index {
       $attemptsId[] = $attempt['id'];
     }
 
-    echo '<pre>';
-    print_r($attemptsId);
-    echo '</pre>';
-    echo '<hr>';
     return $races;
   }
 }
