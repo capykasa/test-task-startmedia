@@ -48,4 +48,41 @@ class Index {
 
     return $resultsWithRacers;
   }
+
+  public function racers() {
+    $racers = $this->cars();
+    $attempts = $this->attempts();
+
+    $newRacers = array_column($racers, null, 'id');
+
+    foreach ($attempts as $attempt) {
+
+      !array_key_exists('results', $newRacers[$attempt['id']])
+        ? $currentRaceNumber = 1
+        : $currentRaceNumber = (int)array_key_last($newRacers[$attempt['id']]['results']) + 1;
+
+      !array_key_exists('results', $newRacers[$attempt['id']])
+        ? $newRacers[$attempt['id']]['results'][ALL_RACES] = $attempt['result']
+        : $newRacers[$attempt['id']]['results'][ALL_RACES] += $attempt['result'];
+
+      $newRacers[$attempt['id']]['results'][$currentRaceNumber] = $attempt['result'];
+    }
+
+    return $newRacers;
+  }
+
+  protected function getNumbersOfRaces(array $attempts): array {
+    $races = [];
+    $attemptsId = [];
+
+    foreach ($attempts as $attempt) {
+      $attemptsId[] = $attempt['id'];
+    }
+
+    echo '<pre>';
+    print_r($attemptsId);
+    echo '</pre>';
+    echo '<hr>';
+    return $races;
+  }
 }

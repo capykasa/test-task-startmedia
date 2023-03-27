@@ -11,5 +11,6 @@ class Module implements IModule {
     $router->addRoute("/^cars$/", C::class, 'cars');
     $router->addRoute("/^attempts$/", C::class, 'attempts');
     $router->addRoute("/^races$/", C::class, 'races');
+    $router->addRoute("/^racers$/", C::class, 'racers');
   }
 }
